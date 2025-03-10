@@ -16,11 +16,11 @@ function S3() {
     facingMode: "user",
   };
   
-  AWS.config.update({
-    accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-    region: process.env.REACT_APP_AWS_REGION,
-  });
+  // AWS.config.update({
+  //   accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+  //   secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+  //   region: process.env.REACT_APP_AWS_REGION,
+  // });
   
   const rekognitionClient = new AWS.Rekognition({
     apiVersion: "2016-06-27",
