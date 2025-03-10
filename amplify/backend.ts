@@ -41,6 +41,11 @@ backend.getSessionResults.resources.lambda.addToRolePolicy(new cdk.aws_iam.Polic
 }),
 ); // allows lambda access
 
+const bucket = new cdk.aws_s3.Bucket(livenessStack, `livenessBucket`, {
+  bucketName: 'liveness-bucket-test-face-cheker', // なんか適当に決める
+  removalPolicy: cdk.RemovalPolicy.DESTROY, // 検証用なのでformation削除時に一緒に掃除したい
+});
+
 
 // create a new API stack
 const apiStack = backend.createStack("api-stack");
@@ -120,6 +125,9 @@ backend.addOutput({
         region: cdk.Stack.of(myRestApi).region,
         apiName: myRestApi.restApiName,
       },
+    },
+    S3: {
+      bucketName: bucket.bucketName,
     },
   },
 });
