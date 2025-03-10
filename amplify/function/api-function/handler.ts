@@ -7,7 +7,14 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   console.log("event", event);
 
   try {
-    const response = await rekognition.createFaceLivenessSession({}).promise();
+    const response = await rekognition.createFaceLivenessSession({
+      Settings: {
+        OutputConfig: {
+          S3Bucket: "liveness-bucket-test-face-cheker",
+          S3KeyPrefix: "my-prefix",
+        }
+      }
+    }).promise();
     const sessionId = response.SessionId; // Adjust based on the actual response structure
 
     return {

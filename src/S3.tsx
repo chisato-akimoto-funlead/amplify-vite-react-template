@@ -1,5 +1,4 @@
-import { Heading, Loader, ThemeProvider } from "@aws-amplify/ui-react";
-import { FaceLivenessDetector } from "@aws-amplify/ui-react-liveness";
+import { ThemeProvider } from "@aws-amplify/ui-react";
 
 function S3() {
   return (
