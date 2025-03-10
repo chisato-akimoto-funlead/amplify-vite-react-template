@@ -48,9 +48,6 @@ const lambdaIntegration = new cdk.aws_apigateway.LambdaIntegration(
 
 // create a new resource path with IAM authorization
 const itemsPath = myRestApi.root.addResource("items", {
-  defaultMethodOptions: {
-    authorizationType: cdk.aws_apigateway.AuthorizationType.IAM,
-  },
 });
 
 // add methods you would like to create to the resource path
@@ -65,18 +62,6 @@ itemsPath.addProxy({
   defaultIntegration: lambdaIntegration,
 });
 
-// create a new Cognito User Pools authorizer
-const cognitoAuth = new cdk.aws_apigateway.CognitoUserPoolsAuthorizer(apiStack, "CognitoAuth", {
-  cognitoUserPools: [backend.auth.resources.userPool],
-});
-
-// create a new resource path with Cognito authorization
-const booksPath = myRestApi.root.addResource("cognito-auth-path");
-booksPath.addMethod("GET", lambdaIntegration, {
-  authorizationType: cdk.aws_apigateway.AuthorizationType.COGNITO,
-  authorizer: cognitoAuth,
-});
-
 // create a new IAM policy to allow Invoke access to the API
 const apiRestPolicy = new cdk.aws_iam.Policy(apiStack, "RestApiPolicy", {
   statements: [
@@ -85,7 +70,6 @@ const apiRestPolicy = new cdk.aws_iam.Policy(apiStack, "RestApiPolicy", {
       resources: [
         `${myRestApi.arnForExecuteApi("*", "/items", "dev")}`,
         `${myRestApi.arnForExecuteApi("*", "/items/*", "dev")}`,
-        `${myRestApi.arnForExecuteApi("*", "/cognito-auth-path", "dev")}`,
       ],
     }),
   ],

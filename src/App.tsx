@@ -1,5 +1,6 @@
 import { Loader, ThemeProvider } from "@aws-amplify/ui-react";
 import { FaceLivenessDetector } from "@aws-amplify/ui-react-liveness";
+import { get } from "aws-amplify/api";
 import React from "react";
 
 function App() {
@@ -14,9 +15,12 @@ function App() {
        * This should be replaced with a real call to your own backend API
        */
       await new Promise((r) => setTimeout(r, 2000));
-      const mockResponse = { sessionId: "mockSessionId" };
-      const data = mockResponse;
-
+      const session = get({
+        apiName: "myApiFunction",
+        path: "/items",
+      });
+      const res = await session.response;
+      const data = { sessionId: await res.body.text() };
       setCreateLivenessApiData(data);
       setLoading(false);
     };
