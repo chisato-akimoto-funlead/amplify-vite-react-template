@@ -19,8 +19,9 @@ function App() {
         apiName: "myRestApi",
         path: "/items",
       }).response;
-      console.log(body.text());
-      const data = { sessionId: await body.text() };
+      console.log(body.json());
+      const val = JSON.parse(await body.text());
+      const data = { sessionId: val.sessionId };
       console.log(data);
       setCreateLivenessApiData(data);
       setLoading(false);
@@ -47,7 +48,7 @@ function App() {
       }
     }).response;
 
-    const data = await body.json();
+    const val = JSON.parse(await body.text());
 
     /*
      * Note: The isLive flag is not returned from the GetFaceLivenessSession API
@@ -56,8 +57,8 @@ function App() {
      * Any next steps from an authorization perspective should happen in your backend and you should not rely
      * on this value for any auth related decisions.
      */
-    console.log(data);
-    if (data) {
+    console.log(val);
+    if (val) {
       console.log("User is live");
     } else {
       console.log("User is not live");
