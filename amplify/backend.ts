@@ -3,6 +3,7 @@ import { auth } from './auth/resource';
 import { data } from './data/resource';
 import * as cdk from 'aws-cdk-lib';
 import { myApiFunction } from './function/api-function/resource';
+import { getSessionResults } from './function/get-session-results/resource';
 
 export const backend = defineBackend({
   auth,
@@ -62,7 +63,7 @@ const myRestApi = new cdk.aws_apigateway.RestApi(apiStack, "RestApi", {
 const lambdaIntegration = new cdk.aws_apigateway.LambdaIntegration(
   backend.myApiFunction.resources.lambda
 );
-const getSessionResults = new cdk.aws_apigateway.LambdaIntegration(
+const getSessionResult = new cdk.aws_apigateway.LambdaIntegration(
   backend.getSessionResults.resources.lambda
 );
 
@@ -77,7 +78,7 @@ itemsPath.addMethod("GET", lambdaIntegration);
 itemsPath.addMethod("POST", lambdaIntegration);
 itemsPath.addMethod("DELETE", lambdaIntegration);
 itemsPath.addMethod("PUT", lambdaIntegration);
-itemsPath2.addMethod("GET", getSessionResults);
+itemsPath2.addMethod("GET", getSessionResult);
 
 // add a proxy resource path to the API
 itemsPath.addProxy({
@@ -86,7 +87,7 @@ itemsPath.addProxy({
 });
 itemsPath2.addProxy({
   anyMethod: true,
-  defaultIntegration: getSessionResults,
+  defaultIntegration: getSessionResult,
 });
 
 // create a new IAM policy to allow Invoke access to the API

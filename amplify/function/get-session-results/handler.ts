@@ -5,11 +5,19 @@ const rekognition = new AWS.Rekognition();
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   console.log("event", event);
+  const hoge = event.queryStringParameters;
+  if (!hoge){
+    throw "error";
+  }
+
 
   try {
     const response = await rekognition.getFaceLivenessSessionResults({
-      SessionId: req.query.sessionId,
-    });
+      SessionId: hoge.sessionId ?? "",
+    }).promise();
+    if(!response.Confidence){
+      throw "error";
+    }
     const isLive = response.Confidence > 90;
     return {
       statusCode: 200,

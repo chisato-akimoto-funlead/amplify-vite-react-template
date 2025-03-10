@@ -15,12 +15,12 @@ function App() {
        * This should be replaced with a real call to your own backend API
        */
       await new Promise((r) => setTimeout(r, 2000));
-      const session = get({
+      const { body } = await get({
         apiName: "myRestApi",
         path: "/items",
-      });
-      const res = await session.response;
-      const data = { sessionId: await res.body.text().sessionId };
+      }).response;
+      console.log(body.text());
+      const data = { sessionId: await body.text() };
       console.log(data);
       setCreateLivenessApiData(data);
       setLoading(false);
@@ -37,16 +37,17 @@ function App() {
       console.error("createLivenessApiData is null");
       return;
     }
-    const response = get({
+    const { body } = await get({
       apiName: "myRestApi",
       path: "/getitems",
-      queryParams: {
-        sessionId: createLivenessApiData.sessionId,
-      },
-    });
+      options: {
+        queryParams: {
+          sessionId: createLivenessApiData.sessionId,
+        },        
+      }
+    }).response;
 
-    const res = await response.response;
-    const data = await res.body.text();
+    const data = await body.json();
 
     /*
      * Note: The isLive flag is not returned from the GetFaceLivenessSession API
@@ -55,7 +56,8 @@ function App() {
      * Any next steps from an authorization perspective should happen in your backend and you should not rely
      * on this value for any auth related decisions.
      */
-    if (data.isLive) {
+    console.log(data);
+    if (data) {
       console.log("User is live");
     } else {
       console.log("User is not live");
