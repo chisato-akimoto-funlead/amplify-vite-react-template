@@ -1,7 +1,7 @@
 import type { APIGatewayProxyHandler } from "aws-lambda";
 import AWS from 'aws-sdk';
 
-const rekognition = new AWS.Rekognition();
+const rekognition = new AWS.Rekognition({region: "us-east-1"});
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   console.log("event", event);
