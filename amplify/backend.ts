@@ -8,6 +8,7 @@ export const backend = defineBackend({
   auth,
   data,
   myApiFunction,
+  getSessionResults,
 });
 
 const livenessStack = backend.createStack("liveness-stack");
@@ -25,6 +26,13 @@ const livenessPolicy = new cdk.aws_iam.Policy(livenessStack, "LivenessPolicy", {
 backend.auth.resources.unauthenticatedUserIamRole.attachInlinePolicy(livenessPolicy); // allows guest user access
 backend.auth.resources.authenticatedUserIamRole.attachInlinePolicy(livenessPolicy); // allows logged in user access
 backend.myApiFunction.resources.lambda.addToRolePolicy(new cdk.aws_iam.PolicyStatement({
+  actions: ["rekognition:StartFaceLivenessSession",
+  "rekognition:CreateFaceLivenessSession",
+  "rekognition:GetFaceLivenessSessionResults"],
+  resources: ["*"],
+}),
+); // allows lambda access
+backend.getSessionResults.resources.lambda.addToRolePolicy(new cdk.aws_iam.PolicyStatement({
   actions: ["rekognition:StartFaceLivenessSession",
   "rekognition:CreateFaceLivenessSession",
   "rekognition:GetFaceLivenessSessionResults"],
@@ -54,9 +62,14 @@ const myRestApi = new cdk.aws_apigateway.RestApi(apiStack, "RestApi", {
 const lambdaIntegration = new cdk.aws_apigateway.LambdaIntegration(
   backend.myApiFunction.resources.lambda
 );
+const getSessionResults = new cdk.aws_apigateway.LambdaIntegration(
+  backend.getSessionResults.resources.lambda
+);
 
 // create a new resource path with IAM authorization
 const itemsPath = myRestApi.root.addResource("items", {
+});
+const itemsPath2 = myRestApi.root.addResource("getitems", {
 });
 
 // add methods you would like to create to the resource path
@@ -64,11 +77,16 @@ itemsPath.addMethod("GET", lambdaIntegration);
 itemsPath.addMethod("POST", lambdaIntegration);
 itemsPath.addMethod("DELETE", lambdaIntegration);
 itemsPath.addMethod("PUT", lambdaIntegration);
+itemsPath2.addMethod("GET", getSessionResults);
 
 // add a proxy resource path to the API
 itemsPath.addProxy({
   anyMethod: true,
   defaultIntegration: lambdaIntegration,
+});
+itemsPath2.addProxy({
+  anyMethod: true,
+  defaultIntegration: getSessionResults,
 });
 
 // create a new IAM policy to allow Invoke access to the API

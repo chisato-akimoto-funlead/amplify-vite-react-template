@@ -20,7 +20,7 @@ function App() {
         path: "/items",
       });
       const res = await session.response;
-      const data = { sessionId: await res.body.text() };
+      const data = { sessionId: await res.body.text().sessionId };
       console.log(data);
       setCreateLivenessApiData(data);
       setLoading(false);
@@ -37,10 +37,16 @@ function App() {
       console.error("createLivenessApiData is null");
       return;
     }
-    const response = await fetch(
-      `/api/get?sessionId=${createLivenessApiData.sessionId}`
-    );
-    const data = await response.json();
+    const response = get({
+      apiName: "myRestApi",
+      path: "/getitems",
+      queryParams: {
+        sessionId: createLivenessApiData.sessionId,
+      },
+    });
+
+    const res = await response.response;
+    const data = await res.body.text();
 
     /*
      * Note: The isLive flag is not returned from the GetFaceLivenessSession API
