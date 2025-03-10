@@ -7,6 +7,7 @@ backend:
         - corepack prepare pnpm@latest --activate
         - pnpm install --frozen-lockfile
         - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+  depsLockFilePath: pnpm-lock.yaml
 frontend:
   phases:
     build:
