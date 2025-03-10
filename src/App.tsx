@@ -19,7 +19,6 @@ function App() {
         apiName: "myRestApi",
         path: "/items",
       }).response;
-      console.log(body.json());
       const val = JSON.parse(await body.text());
       const data = { sessionId: val.sessionId };
       console.log(data);
