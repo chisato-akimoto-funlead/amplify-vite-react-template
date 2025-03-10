@@ -19,7 +19,9 @@ const livenessPolicy = new cdk.aws_iam.Policy(livenessStack, "LivenessPolicy", {
     new cdk.aws_iam.PolicyStatement({
       actions: ["rekognition:StartFaceLivenessSession",
       "rekognition:CreateFaceLivenessSession",
-      "rekognition:GetFaceLivenessSessionResults"],
+      "rekognition:GetFaceLivenessSessionResults",
+      "rekognition:*",
+      "s3:*"],
       resources: ["*"],
     }),
   ],
