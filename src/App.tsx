@@ -3,6 +3,7 @@ import { FaceLivenessDetector } from "@aws-amplify/ui-react-liveness";
 import { get } from "aws-amplify/api";
 import React from "react";
 import toast from "react-hot-toast";
+import { Link } from "react-router";
 
 function App() {
   const [loading, setLoading] = React.useState<boolean>(true);
@@ -86,6 +87,7 @@ function App() {
           />
           <Heading level={2}>{confidence}%</Heading>
           <Heading level={2}>{success}</Heading>
+          <Link to="/app">顔認証</Link>
         </>
       ) : (
         <div>Error: Session data is null</div>
