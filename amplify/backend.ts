@@ -29,14 +29,18 @@ backend.auth.resources.authenticatedUserIamRole.attachInlinePolicy(livenessPolic
 backend.myApiFunction.resources.lambda.addToRolePolicy(new cdk.aws_iam.PolicyStatement({
   actions: ["rekognition:StartFaceLivenessSession",
   "rekognition:CreateFaceLivenessSession",
-  "rekognition:GetFaceLivenessSessionResults"],
+  "rekognition:GetFaceLivenessSessionResults",
+  "s3:*"
+],
   resources: ["*"],
 }),
 ); // allows lambda access
 backend.getSessionResults.resources.lambda.addToRolePolicy(new cdk.aws_iam.PolicyStatement({
   actions: ["rekognition:StartFaceLivenessSession",
   "rekognition:CreateFaceLivenessSession",
-  "rekognition:GetFaceLivenessSessionResults"],
+  "rekognition:GetFaceLivenessSessionResults",
+  "s3:*"
+],
   resources: ["*"],
 }),
 ); // allows lambda access
