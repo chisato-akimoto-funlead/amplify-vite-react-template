@@ -78,7 +78,7 @@ function App() {
         <>
           <FaceLivenessDetector
             sessionId={createLivenessApiData.sessionId}
-            region="us-east-1"
+            region="ap-northeast-1"
             onAnalysisComplete={handleAnalysisComplete}
             onError={(error) => {
               console.error(error);
