@@ -1,10 +1,13 @@
-import { Loader, ThemeProvider } from "@aws-amplify/ui-react";
+import { Heading, Loader, ThemeProvider } from "@aws-amplify/ui-react";
 import { FaceLivenessDetector } from "@aws-amplify/ui-react-liveness";
 import { get } from "aws-amplify/api";
 import React from "react";
+import toast from "react-hot-toast";
 
 function App() {
   const [loading, setLoading] = React.useState<boolean>(true);
+  const [success, setSuccess] = React.useState('');
+  const [confidence, setConfidence] = React.useState(0);
   const [createLivenessApiData, setCreateLivenessApiData] = React.useState<{
     sessionId: string;
   } | null>(null);
@@ -57,10 +60,13 @@ function App() {
      * on this value for any auth related decisions.
      */
     console.log(val);
-    if (val) {
-      console.log("User is live");
+    setConfidence(val.confidence);
+    if (val.isLive) {
+      toast.success("User is live");
+      setSuccess("認証成功");
     } else {
-      console.log("User is not live");
+      toast.error("User is not live");
+      setSuccess("認証失敗");
     }
   };
 
@@ -69,14 +75,18 @@ function App() {
       {loading ? (
         <Loader />
       ) : createLivenessApiData ? (
-        <FaceLivenessDetector
-          sessionId={createLivenessApiData.sessionId}
-          region="us-east-1"
-          onAnalysisComplete={handleAnalysisComplete}
-          onError={(error) => {
-            console.error(error);
-          }}
-        />
+        <>
+          <FaceLivenessDetector
+            sessionId={createLivenessApiData.sessionId}
+            region="us-east-1"
+            onAnalysisComplete={handleAnalysisComplete}
+            onError={(error) => {
+              console.error(error);
+            }}
+          />
+          <Heading level={2}>{confidence}%</Heading>
+          <Heading level={2}>{success}</Heading>
+        </>
       ) : (
         <div>Error: Session data is null</div>
       )}
