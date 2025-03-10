@@ -15,13 +15,22 @@ const livenessStack = backend.createStack("liveness-stack");
 const livenessPolicy = new cdk.aws_iam.Policy(livenessStack, "LivenessPolicy", {
   statements: [
     new cdk.aws_iam.PolicyStatement({
-      actions: ["rekognition:StartFaceLivenessSession"],
+      actions: ["rekognition:StartFaceLivenessSession",
+      "rekognition:CreateFaceLivenessSession",
+      "rekognition:GetFaceLivenessSessionResults"],
       resources: ["*"],
     }),
   ],
 });
 backend.auth.resources.unauthenticatedUserIamRole.attachInlinePolicy(livenessPolicy); // allows guest user access
 backend.auth.resources.authenticatedUserIamRole.attachInlinePolicy(livenessPolicy); // allows logged in user access
+backend.myApiFunction.resources.lambda.addToRolePolicy(new cdk.aws_iam.PolicyStatement({
+  actions: ["rekognition:StartFaceLivenessSession",
+  "rekognition:CreateFaceLivenessSession",
+  "rekognition:GetFaceLivenessSessionResults"],
+  resources: ["*"],
+}),
+); // allows lambda access
 
 
 // create a new API stack

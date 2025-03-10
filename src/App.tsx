@@ -16,11 +16,12 @@ function App() {
        */
       await new Promise((r) => setTimeout(r, 2000));
       const session = get({
-        apiName: "myApiFunction",
+        apiName: "myRestApi",
         path: "/items",
       });
       const res = await session.response;
       const data = { sessionId: await res.body.text() };
+      console.log(data);
       setCreateLivenessApiData(data);
       setLoading(false);
     };
