@@ -24,7 +24,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     };
     const result =  await rekognition.detectFaces(params).promise();
     const s3peg = await s3Client.getObject({
-      Bucket: "liveness-bucket-test-face-cheker ",
+      Bucket: "liveness-bucket-test-face-cheker",
       Key:
         "my-prefix/a6d5a03e-97db-494c-a65b-62b4c6552285/reference.jpg",
     }).promise();
