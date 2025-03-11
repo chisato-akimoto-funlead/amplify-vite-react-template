@@ -1,6 +1,8 @@
 import { useRef, useState, useCallback } from "react";
 import Webcam from "react-webcam";
 import {
+  CompareFacesMatchList,
+  CompareFacesResponse,
   DetectFacesResponse,
   FaceDetailList,
 } from "aws-sdk/clients/rekognition";
@@ -16,6 +18,13 @@ function S3() {
     facingMode: "user",
   };
   
+  //分析結果からConfidence（分析結果の信頼度）取得
+  const getFaceMatch = (faceMatchResult: CompareFacesResponse): number => {
+    console.log("getConfidence");
+    console.log(faceMatchResult);
+    return (faceMatchResult.FaceMatches as CompareFacesMatchList)[0].Similarity!;
+  };
+
   //分析結果からConfidence（分析結果の信頼度）取得
   const getConfidence = (rekognizeResult: DetectFacesResponse): number => {
     console.log("getConfidence");
@@ -59,6 +68,7 @@ function S3() {
     }
   }, [webcamRef]);
 
+  const [faceMatchResult, setfaceMatchResult] = useState<CompareFacesResponse>();
   const [rekognizeResult, setRekognizeResult] = useState<DetectFacesResponse>();
   const rekognizeHandler = async () => {
     const { body } = await post({
@@ -73,6 +83,7 @@ function S3() {
     const result = JSON.parse(await body.text());
     console.log(result);
     setRekognizeResult(result.result);
+    setfaceMatchResult(result.compare);
     //   console.log(result);
   };
   return (
@@ -130,6 +141,9 @@ function S3() {
               flexDirection: "row",
               justifyContent: "flex-start"
               }}>
+              {typeof faceMatchResult !== "undefined" && (
+                <div>{"FaceMatchRate: " + getFaceMatch(faceMatchResult)}</div>
+              )}
               <div>{"Confidence: " + getConfidence(rekognizeResult)}</div>
               <div>
                 {"AgeRange: " +
