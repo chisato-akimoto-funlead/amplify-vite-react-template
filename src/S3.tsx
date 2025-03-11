@@ -73,7 +73,7 @@ function S3() {
         apiName: "myRestApi",
         path: "/getDetect",
         options: {
-          queryParams: {
+          body: {
             imageData: url as string,
           },        
         }
