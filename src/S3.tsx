@@ -1,10 +1,9 @@
 import { useRef, useState, useCallback } from "react";
 import Webcam from "react-webcam";
-// import {
-//   DetectFacesRequest,
-//   DetectFacesResponse,
-//   FaceDetailList,
-// } from "aws-sdk/clients/rekognition";
+import {
+  DetectFacesResponse,
+  FaceDetailList,
+} from "aws-sdk/clients/rekognition";
 // import AWS from "aws-sdk";
 import { ThemeProvider } from "@aws-amplify/ui-react";
 import { post } from "aws-amplify/api";
@@ -17,44 +16,34 @@ function S3() {
     facingMode: "user",
   };
   
-  // AWS.config.update({
-  //   accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-  //   secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-  //   region: process.env.REACT_APP_AWS_REGION,
-  // });
+  //分析結果からConfidence（分析結果の信頼度）取得
+  const getConfidence = (rekognizeResult: DetectFacesResponse): number => {
+    return (rekognizeResult.FaceDetails as FaceDetailList)[0].Confidence!;
+  };
   
-  // const rekognitionClient = new AWS.Rekognition({
-  //   apiVersion: "2016-06-27",
-  // });
+  //分析結果からLowAge（推測される年齢範囲の加減）取得
+  const getLowAge = (rekognizeResult: DetectFacesResponse): number => {
+    return (rekognizeResult.FaceDetails as FaceDetailList)[0].AgeRange?.Low!;
+  };
   
-  // //分析結果からConfidence（分析結果の信頼度）取得
-  // const getConfidence = (rekognizeResult: DetectFacesResponse): number => {
-  //   return (rekognizeResult.FaceDetails as FaceDetailList)[0].Confidence!;
-  // };
+  //分析結果からHighAge（推測される年齢範囲の上限）取得
+  const getHighAge = (rekognizeResult: DetectFacesResponse): number => {
+    return (rekognizeResult.FaceDetails as FaceDetailList)[0].AgeRange?.High!;
+  };
   
-  // //分析結果からLowAge（推測される年齢範囲の加減）取得
-  // const getLowAge = (rekognizeResult: DetectFacesResponse): number => {
-  //   return (rekognizeResult.FaceDetails as FaceDetailList)[0].AgeRange?.Low!;
-  // };
+  //分析結果からEyeglasses（眼鏡を掛けているか）取得
+  const getIsWearingEyeGlasses = (
+    rekognizeResult: DetectFacesResponse
+  ): boolean => {
+    return (rekognizeResult.FaceDetails as FaceDetailList)[0].Eyeglasses?.Value!;
+  };
   
-  // //分析結果からHighAge（推測される年齢範囲の上限）取得
-  // const getHighAge = (rekognizeResult: DetectFacesResponse): number => {
-  //   return (rekognizeResult.FaceDetails as FaceDetailList)[0].AgeRange?.High!;
-  // };
-  
-  // //分析結果からEyeglasses（眼鏡を掛けているか）取得
-  // const getIsWearingEyeGlasses = (
-  //   rekognizeResult: DetectFacesResponse
-  // ): boolean => {
-  //   return (rekognizeResult.FaceDetails as FaceDetailList)[0].Eyeglasses?.Value!;
-  // };
-  
-  // //分析結果からEyeglasses（サングラスを掛けているか）取得
-  // const getIsWearingSunGlasses = (
-  //   rekognizeResult: DetectFacesResponse
-  // ): boolean => {
-  //   return (rekognizeResult.FaceDetails as FaceDetailList)[0].Sunglasses?.Value!;
-  // };
+  //分析結果からEyeglasses（サングラスを掛けているか）取得
+  const getIsWearingSunGlasses = (
+    rekognizeResult: DetectFacesResponse
+  ): boolean => {
+    return (rekognizeResult.FaceDetails as FaceDetailList)[0].Sunglasses?.Value!;
+  };
   const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
   const webcamRef = useRef<Webcam>(null);
   const [url, setUrl] = useState<string | null>(null);
@@ -66,9 +55,8 @@ function S3() {
     }
   }, [webcamRef]);
 
-  // const [rekognizeResult, setRekognizeResult] = useState<DetectFacesResponse>();
+  const [rekognizeResult, setRekognizeResult] = useState<DetectFacesResponse>();
   const rekognizeHandler = async () => {
-    //   const result: DetectFacesResponse = await detectFaces(url as string);
     const { body } = await post({
         apiName: "myRestApi",
         path: "/getDetect",
@@ -78,9 +66,9 @@ function S3() {
           },        
         }
       }).response;
-      const val = JSON.parse(await body.text());
-      console.log(val);
-    // setRekognizeResult(result);
+    const result = JSON.parse(await body.text());
+    console.log(result);
+    setRekognizeResult(result);
     //   console.log(result);
   };
   return (
@@ -131,7 +119,7 @@ function S3() {
           <div>
             <img src={url} alt="Screenshot" />
           </div>
-          {/* {typeof rekognizeResult !== "undefined" && (
+          {typeof rekognizeResult !== "undefined" && (
             <div style={{      
               flex: 1,
               width: "100%",
@@ -152,7 +140,7 @@ function S3() {
                 {"Sunglasses: " + getIsWearingSunGlasses(rekognizeResult)}
               </div>
             </div>
-          )} */}
+          )}
         </>
       )} 
     </ThemeProvider>
