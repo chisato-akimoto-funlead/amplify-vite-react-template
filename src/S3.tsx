@@ -1,20 +1,20 @@
-import { useRef, useState, useCallback } from "react";
-import Webcam from "react-webcam";
-import {
-  DetectFacesRequest,
-  DetectFacesResponse,
-  FaceDetailList,
-} from "aws-sdk/clients/rekognition";
-import AWS from "aws-sdk";
+// import { useRef, useState, useCallback } from "react";
+// import Webcam from "react-webcam";
+// import {
+//   DetectFacesRequest,
+//   DetectFacesResponse,
+//   FaceDetailList,
+// } from "aws-sdk/clients/rekognition";
+// import AWS from "aws-sdk";
 import { ThemeProvider } from "@aws-amplify/ui-react";
 
 function S3() {
 
-  const videoConstraints = {
-    width: 720,
-    height: 360,
-    facingMode: "user",
-  };
+  // const videoConstraints = {
+  //   width: 720,
+  //   height: 360,
+  //   facingMode: "user",
+  // };
   
   // AWS.config.update({
   //   accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
@@ -68,7 +68,7 @@ function S3() {
   // ): boolean => {
   //   return (rekognizeResult.FaceDetails as FaceDetailList)[0].Sunglasses?.Value!;
   // };
-  const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
+  // const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
   // const webcamRef = useRef<Webcam>(null);
   // const [url, setUrl] = useState<string | null>(null);
   // const capture = useCallback(() => {
@@ -92,7 +92,8 @@ function S3() {
         <h1>カメラアプリ（顔分析付き）</h1>
       </header>
       {/* {isCaptureEnable || ( */}
-        <button onClick={() => setCaptureEnable(true)}>開始</button>
+        {/* <button onClick={() => setCaptureEnable(true)}>開始</button> */}
+        <button>開始</button>
       {/* )}
       {isCaptureEnable && (
         <>
