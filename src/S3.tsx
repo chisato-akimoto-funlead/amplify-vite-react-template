@@ -18,6 +18,7 @@ function S3() {
   
   //分析結果からConfidence（分析結果の信頼度）取得
   const getConfidence = (rekognizeResult: DetectFacesResponse): number => {
+    console.log(rekognizeResult);
     return (rekognizeResult.FaceDetails as FaceDetailList)[0].Confidence!;
   };
   
