@@ -22,78 +22,78 @@ function S3() {
   //   region: process.env.REACT_APP_AWS_REGION,
   // });
   
-  const rekognitionClient = new AWS.Rekognition({
-    apiVersion: "2016-06-27",
-  });
+  // const rekognitionClient = new AWS.Rekognition({
+  //   apiVersion: "2016-06-27",
+  // });
   
-  //Amazon Rekognitionによる顔分析
-  const detectFaces = async (imageData: string): Promise<DetectFacesResponse> => {
-    const params: DetectFacesRequest = {
-      Image: {
-        Bytes: Buffer.from(
-          imageData.replace("data:image/jpeg;base64,", ""),
-          "base64"
-        ),
-      },
-      Attributes: ["ALL"],
-    };
-    return await rekognitionClient.detectFaces(params).promise();
-  };
+  // //Amazon Rekognitionによる顔分析
+  // const detectFaces = async (imageData: string): Promise<DetectFacesResponse> => {
+  //   const params: DetectFacesRequest = {
+  //     Image: {
+  //       Bytes: Buffer.from(
+  //         imageData.replace("data:image/jpeg;base64,", ""),
+  //         "base64"
+  //       ),
+  //     },
+  //     Attributes: ["ALL"],
+  //   };
+  //   return await rekognitionClient.detectFaces(params).promise();
+  // };
   
-  //分析結果からConfidence（分析結果の信頼度）取得
-  const getConfidence = (rekognizeResult: DetectFacesResponse): number => {
-    return (rekognizeResult.FaceDetails as FaceDetailList)[0].Confidence!;
-  };
+  // //分析結果からConfidence（分析結果の信頼度）取得
+  // const getConfidence = (rekognizeResult: DetectFacesResponse): number => {
+  //   return (rekognizeResult.FaceDetails as FaceDetailList)[0].Confidence!;
+  // };
   
-  //分析結果からLowAge（推測される年齢範囲の加減）取得
-  const getLowAge = (rekognizeResult: DetectFacesResponse): number => {
-    return (rekognizeResult.FaceDetails as FaceDetailList)[0].AgeRange?.Low!;
-  };
+  // //分析結果からLowAge（推測される年齢範囲の加減）取得
+  // const getLowAge = (rekognizeResult: DetectFacesResponse): number => {
+  //   return (rekognizeResult.FaceDetails as FaceDetailList)[0].AgeRange?.Low!;
+  // };
   
-  //分析結果からHighAge（推測される年齢範囲の上限）取得
-  const getHighAge = (rekognizeResult: DetectFacesResponse): number => {
-    return (rekognizeResult.FaceDetails as FaceDetailList)[0].AgeRange?.High!;
-  };
+  // //分析結果からHighAge（推測される年齢範囲の上限）取得
+  // const getHighAge = (rekognizeResult: DetectFacesResponse): number => {
+  //   return (rekognizeResult.FaceDetails as FaceDetailList)[0].AgeRange?.High!;
+  // };
   
-  //分析結果からEyeglasses（眼鏡を掛けているか）取得
-  const getIsWearingEyeGlasses = (
-    rekognizeResult: DetectFacesResponse
-  ): boolean => {
-    return (rekognizeResult.FaceDetails as FaceDetailList)[0].Eyeglasses?.Value!;
-  };
+  // //分析結果からEyeglasses（眼鏡を掛けているか）取得
+  // const getIsWearingEyeGlasses = (
+  //   rekognizeResult: DetectFacesResponse
+  // ): boolean => {
+  //   return (rekognizeResult.FaceDetails as FaceDetailList)[0].Eyeglasses?.Value!;
+  // };
   
-  //分析結果からEyeglasses（サングラスを掛けているか）取得
-  const getIsWearingSunGlasses = (
-    rekognizeResult: DetectFacesResponse
-  ): boolean => {
-    return (rekognizeResult.FaceDetails as FaceDetailList)[0].Sunglasses?.Value!;
-  };
+  // //分析結果からEyeglasses（サングラスを掛けているか）取得
+  // const getIsWearingSunGlasses = (
+  //   rekognizeResult: DetectFacesResponse
+  // ): boolean => {
+  //   return (rekognizeResult.FaceDetails as FaceDetailList)[0].Sunglasses?.Value!;
+  // };
   const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
-  const webcamRef = useRef<Webcam>(null);
-  const [url, setUrl] = useState<string | null>(null);
-  const capture = useCallback(() => {
-    const imageSrc = webcamRef.current?.getScreenshot();
-    if (imageSrc) {
-      setUrl(imageSrc);
-      setRekognizeResult(undefined);
-    }
-  }, [webcamRef]);
+  // const webcamRef = useRef<Webcam>(null);
+  // const [url, setUrl] = useState<string | null>(null);
+  // const capture = useCallback(() => {
+  //   const imageSrc = webcamRef.current?.getScreenshot();
+  //   if (imageSrc) {
+  //     setUrl(imageSrc);
+  //     setRekognizeResult(undefined);
+  //   }
+  // }, [webcamRef]);
 
-  const [rekognizeResult, setRekognizeResult] = useState<DetectFacesResponse>();
-  const rekognizeHandler = async () => {
-    const result: DetectFacesResponse = await detectFaces(url as string);
-    setRekognizeResult(result);
-    console.log(result);
-  };
+  // const [rekognizeResult, setRekognizeResult] = useState<DetectFacesResponse>();
+  // const rekognizeHandler = async () => {
+  //   const result: DetectFacesResponse = await detectFaces(url as string);
+  //   setRekognizeResult(result);
+  //   console.log(result);
+  // };
   return (
     <>
     <ThemeProvider>
       <header>
         <h1>カメラアプリ（顔分析付き）</h1>
       </header>
-      {isCaptureEnable || (
+      {/* {isCaptureEnable || ( */}
         <button onClick={() => setCaptureEnable(true)}>開始</button>
-      )}
+      {/* )}
       {isCaptureEnable && (
         <>
           <div>
@@ -156,7 +156,7 @@ function S3() {
             </div>
           )}
         </>
-      )}
+      )} */}
     </ThemeProvider>
     </>
   );
