@@ -70,7 +70,7 @@ function S3() {
           },        
         }
       }).response;
-    const result = JSON.parse(await body.text());
+    const result: DetectFacesResponse = JSON.parse(await body.text());
     console.log(result);
     setRekognizeResult(result);
     //   console.log(result);
