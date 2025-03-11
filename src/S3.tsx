@@ -7,6 +7,7 @@ import Webcam from "react-webcam";
 // } from "aws-sdk/clients/rekognition";
 // import AWS from "aws-sdk";
 import { ThemeProvider } from "@aws-amplify/ui-react";
+import { get } from "aws-amplify/api";
 
 function S3() {
 
@@ -25,20 +26,6 @@ function S3() {
   // const rekognitionClient = new AWS.Rekognition({
   //   apiVersion: "2016-06-27",
   // });
-  
-  //Amazon Rekognitionによる顔分析
-  // const detectFaces = async (imageData: string): Promise<DetectFacesResponse> => {
-  //   const params: DetectFacesRequest = {
-  //     Image: {
-  //       Bytes: Buffer.from(
-  //         imageData.replace("data:image/jpeg;base64,", ""),
-  //         "base64"
-  //       ),
-  //     },
-  //     Attributes: ["ALL"],
-  //   };
-  //   return await rekognitionClient.detectFaces(params).promise();
-  // };
   
   // //分析結果からConfidence（分析結果の信頼度）取得
   // const getConfidence = (rekognizeResult: DetectFacesResponse): number => {
@@ -81,9 +68,20 @@ function S3() {
 
   // const [rekognizeResult, setRekognizeResult] = useState<DetectFacesResponse>();
   const rekognizeHandler = async () => {
-  //   const result: DetectFacesResponse = await detectFaces(url as string);
-  // setRekognizeResult(result);
-  //   console.log(result);
+    //   const result: DetectFacesResponse = await detectFaces(url as string);
+    const { body } = await get({
+        apiName: "myRestApi",
+        path: "/getDetect",
+        options: {
+          queryParams: {
+            imageData: url as string,
+          },        
+        }
+      }).response;
+      const val = JSON.parse(await body.text());
+      console.log(val);
+    // setRekognizeResult(result);
+    //   console.log(result);
   };
   return (
     <>

@@ -4,12 +4,14 @@ import { data } from './data/resource';
 import * as cdk from 'aws-cdk-lib';
 import { myApiFunction } from './function/api-function/resource';
 import { getSessionResults } from './function/get-session-results/resource';
+import { getDetect } from './function/get-detect/resource';
 
 export const backend = defineBackend({
   auth,
   data,
   myApiFunction,
   getSessionResults,
+  getDetect
 });
 
 const livenessStack = backend.createStack("liveness-stack");
@@ -47,6 +49,17 @@ backend.getSessionResults.resources.lambda.addToRolePolicy(new cdk.aws_iam.Polic
 }),
 ); // allows lambda access
 
+backend.getDetect.resources.lambda.addToRolePolicy(new cdk.aws_iam.PolicyStatement({
+  actions: ["rekognition:StartFaceLivenessSession",
+  "rekognition:CreateFaceLivenessSession",
+  "rekognition:GetFaceLivenessSessionResults",
+  "rekognition:*",
+  "s3:*"
+],
+  resources: ["*"],
+}),
+); // allows lambda access
+
 const bucket = new cdk.aws_s3.Bucket(livenessStack, `livenessBucket`, {
   bucketName: 'liveness-bucket-test-face-cheker', // なんか適当に決める
   removalPolicy: cdk.RemovalPolicy.DESTROY, // 検証用なのでformation削除時に一緒に掃除したい
@@ -77,11 +90,16 @@ const lambdaIntegration = new cdk.aws_apigateway.LambdaIntegration(
 const getSessionResult = new cdk.aws_apigateway.LambdaIntegration(
   backend.getSessionResults.resources.lambda
 );
+const getDetec = new cdk.aws_apigateway.LambdaIntegration(
+  backend.getDetect.resources.lambda
+);
 
 // create a new resource path with IAM authorization
 const itemsPath = myRestApi.root.addResource("items", {
 });
 const itemsPath2 = myRestApi.root.addResource("getitems", {
+});
+const itemsPath3 = myRestApi.root.addResource("getDetect", {
 });
 
 // add methods you would like to create to the resource path
@@ -90,6 +108,7 @@ itemsPath.addMethod("POST", lambdaIntegration);
 itemsPath.addMethod("DELETE", lambdaIntegration);
 itemsPath.addMethod("PUT", lambdaIntegration);
 itemsPath2.addMethod("GET", getSessionResult);
+itemsPath3.addMethod("GET", getDetec);
 
 // add a proxy resource path to the API
 itemsPath.addProxy({
@@ -100,6 +119,10 @@ itemsPath2.addProxy({
   anyMethod: true,
   defaultIntegration: getSessionResult,
 });
+itemsPath3.addProxy({
+  anyMethod: true,
+  defaultIntegration: getDetec,
+});
 
 // create a new IAM policy to allow Invoke access to the API
 const apiRestPolicy = new cdk.aws_iam.Policy(apiStack, "RestApiPolicy", {
@@ -107,8 +130,7 @@ const apiRestPolicy = new cdk.aws_iam.Policy(apiStack, "RestApiPolicy", {
     new cdk.aws_iam.PolicyStatement({
       actions: ["execute-api:Invoke"],
       resources: [
-        `${myRestApi.arnForExecuteApi("*", "/items", "dev")}`,
-        `${myRestApi.arnForExecuteApi("*", "/items/*", "dev")}`,
+        "*"
       ],
     }),
   ],
