@@ -108,7 +108,7 @@ itemsPath.addMethod("POST", lambdaIntegration);
 itemsPath.addMethod("DELETE", lambdaIntegration);
 itemsPath.addMethod("PUT", lambdaIntegration);
 itemsPath2.addMethod("GET", getSessionResult);
-itemsPath3.addMethod("GET", getDetec);
+itemsPath3.addMethod("POST", getDetec);
 
 // add a proxy resource path to the API
 itemsPath.addProxy({

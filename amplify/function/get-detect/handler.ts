@@ -5,11 +5,12 @@ const rekognition = new AWS.Rekognition({region: "ap-northeast-1"});
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   console.log("event", event);
-  const hoge = event.queryStringParameters;
+  const hoge = event.body;
   if (!hoge){
     throw "error";
   }
-  const imageData = hoge.imageData ?? "";
+  const val = JSON.parse(hoge);
+  const imageData = val.imageData ?? "";
   try {
     const params = {
       Image: {

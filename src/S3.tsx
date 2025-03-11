@@ -7,7 +7,7 @@ import Webcam from "react-webcam";
 // } from "aws-sdk/clients/rekognition";
 // import AWS from "aws-sdk";
 import { ThemeProvider } from "@aws-amplify/ui-react";
-import { get } from "aws-amplify/api";
+import { post } from "aws-amplify/api";
 
 function S3() {
 
@@ -69,7 +69,7 @@ function S3() {
   // const [rekognizeResult, setRekognizeResult] = useState<DetectFacesResponse>();
   const rekognizeHandler = async () => {
     //   const result: DetectFacesResponse = await detectFaces(url as string);
-    const { body } = await get({
+    const { body } = await post({
         apiName: "myRestApi",
         path: "/getDetect",
         options: {
