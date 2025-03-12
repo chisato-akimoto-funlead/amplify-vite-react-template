@@ -41,6 +41,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
           "base64"
         ),
       },
+      SimilarityThreshold: 0,
     }).promise();
     return {
       statusCode: 200,
