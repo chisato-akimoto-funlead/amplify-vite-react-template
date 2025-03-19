@@ -16,6 +16,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^6.4.7",
     "@radix-ui/react-toast": "^1.2.6",
+    "@tensorflow/tfjs": "^4.22.0",
     "aws-amplify": "^6.6.6",
     "aws-cdk-lib": "^2.182.0",
     "aws-sdk": "^2.1692.0",

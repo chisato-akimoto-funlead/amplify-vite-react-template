@@ -1,4 +1,5 @@
 import * as faceapi from "face-api.js";
+import * as tf from "@tensorflow/tfjs";
 
 let modelsLoaded = false;
 
@@ -6,6 +7,8 @@ export async function loadFaceDetectionModels() {
   if (modelsLoaded) return;
 
   try {
+    await tf.setBackend('wasm');  // バックエンドを明示的に設定
+    await tf.ready();  // 初期化完了を待つ
     // Load only necessary models
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
