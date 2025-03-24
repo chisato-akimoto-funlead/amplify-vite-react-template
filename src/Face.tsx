@@ -8,7 +8,7 @@ import { useLocale } from './hooks/useLocale';
 
 export default function Face() {
 
-  const { localizedStrings } = useLocale()
+  const { localizedStrings } = useLocale();
 
   return (
     <Box mx={'auto'} as='main' maxWidth={'420px'}>
