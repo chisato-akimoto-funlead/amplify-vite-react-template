@@ -1,7 +1,5 @@
 import { 
     Box,
-    Heading,
-    Text,
     Image,
     Button,
     Spinner,

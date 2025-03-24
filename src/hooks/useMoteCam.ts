@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, RefObject } from "react";
+import { useState, useRef, RefObject } from "react";
 import * as faceapi from '@vladmandic/face-api';
 import { CustomDetectedFace } from "../types/CustomDetectedFace";
 import { FaceExpression, FaceExp } from "../types/FaceExpression";
@@ -33,7 +33,7 @@ const useMOTECam = (): MoteCamType => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const photoRef = useRef<HTMLImageElement>(null)
 
-    const { locale, localizedStrings, languageCode } = useLocale()
+    const {  localizedStrings, languageCode } = useLocale()
 
     const startMoteCam = async () => {
 
@@ -140,7 +140,6 @@ const useMOTECam = (): MoteCamType => {
                     // @ts-ignore
                     advanced: [{ brightness: 50, contrast: 50 }]
                 });
-            const constraint = track.getConstraints()
             const settings = track.getSettings();
             if (settings.deviceId) {
                 // Delete property / Release memory indirectly
@@ -176,13 +175,11 @@ const useMOTECam = (): MoteCamType => {
         if (videoRef.current) {
             const video = videoRef.current as HTMLVideoElement
             if (!video.paused) {
-                const t0 = performance.now();
                 const detectedFace = await faceapi
                     .detectSingleFace(video, detectorOptions)
                     .withFaceLandmarks()
                     .withFaceExpressions()
                     .withAgeAndGender()
-                const fps = 1000 / (performance.now() - t0);
                 // Debugging Draw Area
                 // showDebuggingRect(detectedFace, fps.toLocaleString(), canvasRef.current)
                 // Check Detected Face
