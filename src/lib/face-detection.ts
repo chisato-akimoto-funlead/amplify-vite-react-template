@@ -7,8 +7,6 @@ export async function loadFaceDetectionModels() {
   if (modelsLoaded) return;
 
   try {
-    await tf.setBackend('wasm');  // バックエンドを明示的に設定
-    await tf.ready();  // 初期化完了を待つ
     // Load only necessary models
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
@@ -19,6 +17,12 @@ export async function loadFaceDetectionModels() {
     console.error("Error loading face detection models:", error);
     throw new Error("Failed to load face detection models. Please check the console for details.");
   }
+}
+
+export async function setup () {
+  
+  await tf.setBackend('webgl');  // バックエンドを明示的に設定
+  await tf.ready();  // 初期化完了を待つ
 }
 
 export async function detectFaces(videoElement: HTMLVideoElement) {
