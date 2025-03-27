@@ -82,11 +82,11 @@ const useMOTECam = (): MoteCamType => {
 
     // Setup Model
     const setupModel = async () => {
-        await faceapi.nets.tinyFaceDetector.load(MODEL_PATH); // using ssdMobilenetv1
-        await faceapi.nets.ageGenderNet.load(MODEL_PATH);
-        await faceapi.nets.faceLandmark68Net.load(MODEL_PATH);
-        await faceapi.nets.faceRecognitionNet.load(MODEL_PATH);
-        await faceapi.nets.faceExpressionNet.load(MODEL_PATH);
+        await faceapi.loadTinyFaceDetectorModel(MODEL_PATH); // using ssdMobilenetv1
+        await faceapi.loadAgeGenderModel(MODEL_PATH);
+        await faceapi.loadFaceLandmarkModel(MODEL_PATH);
+        await faceapi.loadFaceRecognitionModel(MODEL_PATH);
+        await faceapi.loadFaceExpressionModel(MODEL_PATH);
     }
 
     // Setup Camera
