@@ -1,9 +1,9 @@
 
 const ja = {
-  APP_TITLE: "モテ写カメラ",
+  APP_TITLE: "人物確認カメラ",
   START_SHOOTING: "撮影を開始します",
   END_SHOOTING: "撮影を終了します",
-  PICTURE_DID_TAKE: "モッテモテ写真が撮影できました",
+  PICTURE_DID_TAKE: "写真が撮影できました",
   GUIDE_MSG_POSITION_GOOD: "ちょうど良いです😀",
   GUIDE_MSG_POSITION_TOO_UPPER: "もう少しシタですね",
   GUIDE_MSG_POSITION_TOO_LOWER: "もう少しウエですね",
