@@ -7,7 +7,7 @@ import { speakMessage } from "../hooks/useSpeech";
 import { useLocale } from "./useLocale";
 import { post } from "aws-amplify/api";
 
-const MODEL_PATH = '/model'
+const MODEL_PATH = '/models'
 const detectorOptions = new faceapi.TinyFaceDetectorOptions();
 
 type MoteCamType = {
