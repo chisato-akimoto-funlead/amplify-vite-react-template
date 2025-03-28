@@ -65,6 +65,11 @@ const bucket = new cdk.aws_s3.Bucket(livenessStack, `livenessBucket`, {
   removalPolicy: cdk.RemovalPolicy.DESTROY, // 検証用なのでformation削除時に一緒に掃除したい
 });
 
+new cdk.aws_s3_deployment.BucketDeployment(livenessStack, 'DeployModels', {
+  sources: [cdk.aws_s3_deployment.Source.asset('./dataset/models.zip')],
+  destinationBucket: bucket
+});
+
 
 // create a new API stack
 const apiStack = backend.createStack("api-stack");
