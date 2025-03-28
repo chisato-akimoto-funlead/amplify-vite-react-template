@@ -66,7 +66,7 @@ const bucket = new cdk.aws_s3.Bucket(livenessStack, `livenessBucket`, {
 });
 
 new cdk.aws_s3_deployment.BucketDeployment(livenessStack, 'DeployModels', {
-  sources: [cdk.aws_s3_deployment.Source.asset('./dataset/models.zip')],
+  sources: [cdk.aws_s3_deployment.Source.asset('./amplify/dataset/models.zip')],
   destinationBucket: bucket
 });
 
