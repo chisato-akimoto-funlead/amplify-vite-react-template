@@ -12,6 +12,8 @@ frontend:
   phases:
     build:
       commands:
+        - aws s3api get-object --bucket model-bucket-test-face-cheker --key models/models.zip ./models.zip
+        - unzip models.zip -d public/mo
         - pnpm run build
   artifacts:
     baseDirectory: dist
