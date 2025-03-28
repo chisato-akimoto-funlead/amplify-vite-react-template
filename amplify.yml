@@ -23,3 +23,8 @@ frontend:
     paths:
       - node_modules/**/*
       - ~/.pnpm-store/**/*
+  customHeaders:
+    - pattern: "*.shard"
+      headers:
+        - key: "Content-Type"
+          value: "application/octet-stream"
